@@ -1,0 +1,11 @@
+name: ModerationUtils
+main: com.mnewt00.moderationutils.ModerationUtils
+version: @version@
+
+author: mnewt00
+description: A plugin for moderators to manage players.
+
+depend: [PremiumVanish, LunarClient-API]
+softdepend: [PlaceholderAPI]
+
+api-version: 1.18

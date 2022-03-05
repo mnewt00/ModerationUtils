@@ -1,0 +1,68 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id "io.freefair.lombok" version "6.0.0-m2"
+}
+
+group 'com.mnewt00'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:22.0.0'
+    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    compileOnly 'com.github.LunarClient:BukkitAPI:v1.0.1'
+    compileOnly 'com.github.LeonMangler:PremiumVanishAPI:2.6.3'
+    compileOnly 'me.clip:placeholderapi:2.10.9'
+    implementation 'co.aikar:acf-paper:0.5.1-SNAPSHOT'
+}
+
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+compileJava {
+    options.compilerArgs += ['-parameters']
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+shadowJar {
+    relocate 'co.aikar.commands', 'com.mnewt00.moderationutils.dependencies.aikar.acf'
+    relocate 'co.aikar.locales', 'com.mnewt00.moderationutils.dependencies.aikar.locales'
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            "version": getVersion()
+    ]
+}
+
+task copyJars(type: Copy) {
+    outputTasks().forEach({ from(it) })
+    rename '(.*)-all.jar', (project.name + '-' + project.version + '.jar')
+    into file('jars')
+}
+
+def outputTasks() {
+    ["shadowJar"].stream().map({ tasks.findByPath(it) })
+}
+
+task cleanJars() {
+    delete file('jars')
+}
+
+clean.dependsOn cleanJars
+build.dependsOn shadowJar
+build.dependsOn copyJars
