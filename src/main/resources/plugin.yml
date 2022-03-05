@@ -3,7 +3,7 @@ main: com.mnewt00.moderationutils.ModerationUtils
 version: @version@
 
 author: mnewt00
-description: A plugin for moderators to manage players.
+description: ModerationUtils is a small set of tools to make moderating easier.
 
 depend: [PremiumVanish, LunarClient-API]
 softdepend: [PlaceholderAPI]
