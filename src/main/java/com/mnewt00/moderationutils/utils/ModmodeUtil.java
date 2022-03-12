@@ -54,7 +54,7 @@ public class ModmodeUtil {
         player.removeMetadata("modmode", ModerationUtils.getInstance());
         InventoryUtils.InventorySaves.restore(player);
 
-        VanishAPI.showPlayer(player);
+        if (player.hasMetadata("vanished")) VanishAPI.showPlayer(player);
         player.setGameMode(GameMode.SURVIVAL);
     }
 }
